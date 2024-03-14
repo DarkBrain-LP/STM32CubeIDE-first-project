@@ -21,9 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#define ONE_SECOND 1000
 /* USER CODE END Includes */
-
+uint16_t factorial(uint16_t n);
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
@@ -32,6 +32,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 int Delay_time = 250;
+int one_second_delay = 1000;
 
 /* USER CODE END PD */
 
@@ -87,6 +88,21 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  // variables :
+  GPIO_TypeDef* green_led = GPIOD;
+  GPIO_TypeDef* portA = GPIOA;
+  int pins_num = 4;
+  int pins[] = {GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
+  uint8_t pin_toggle_delay = 1000;
+  int pin_speed = 4;
+
+  GPIO_PinState btn_poussoir_state;
+  int mavariable = 0;
+  btn_poussoir_state = HAL_GPIO_ReadPin(portA, GPIO_PIN_0);
+
+  int toto = 0;
+
+  int tm = 1680000;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -96,7 +112,9 @@ int main(void)
     /* USER CODE END WHILE */
 	  //(GPIO_TypeDef*) GPIOD = GPIOD;
 
+	  /*
 	  // blink LEDs
+
 	  if (GPIOD->ODR & 0x0000F000) // GPIOD−>ODR & 0x0000F000
 	  {
 		  GPIOD->BSRR |= 0xF0000000 ;
@@ -106,10 +124,143 @@ int main(void)
 		  GPIOD->BSRR |= 0x0000F000 ;
 	  }
 	  HAL_Delay(Delay_time) ;
+	  */
+
+	  // Turn on the Green LED
+	  /*
+	  HAL_GPIO_WritePin(green_led, GPIO_PIN_12, GPIO_PIN_SET);
+	  HAL_Delay(1000);
+	  // turn it off
+	  HAL_GPIO_WritePin(green_led, GPIO_PIN_12, GPIO_PIN_RESET);
+	  HAL_Delay(1000);
+
+
+	  HAL_GPIO_TogglePin(green_led, GPIO_PIN_12);
+	  HAL_Delay(1000);
+
+	  // 2
+
+	  int t = 1000;
+	  for(int i = 0; i < pins_num; i++)
+	  {
+
+		  uint16_t current_pin = ((uint16_t)pins[i]);
+
+		  HAL_GPIO_TogglePin(green_led, current_pin);
+	  }
+		  HAL_Delay(pin_toggle_delay);
+
+	  // =========== CHENILLARD ==============
+	  // 3 bouton poussoir
+		  GPIO_PinState btn_poussoir_state;
+		  int mavariable = 0;
+		  btn_poussoir_state = HAL_GPIO_ReadPin(portA, GPIO_PIN_0);
+		  if(btn_poussoir_state == GPIO_PIN_SET){
+			  mavariable = 1;
+			  pin_toggle_delay /= pin_speed;
+		  }
+		  else{
+			  mavariable = 0;
+		  }
+
+	  for(int i = 0; i < pins_num; i++)
+	  {
+
+		  uint16_t current_pin = ((uint16_t)pins[i]);
+
+
+		  HAL_GPIO_TogglePin(green_led, current_pin);
+		  HAL_Delay(pin_toggle_delay);
+		  HAL_GPIO_TogglePin(green_led, current_pin);
+		  HAL_Delay(pin_toggle_delay);
+	  }
+
+	  // ============== TP2 Programmation en C ==========
+	  // 1
+	  if(btn_poussoir_state == GPIO_PIN_SET){
+		  mavariable = 1;
+		  pin_toggle_delay /= pin_speed;
+		  HAL_GPIO_WritePin(green_led, GPIO_PIN_14, GPIO_PIN_SET);
+	  }
+	  // 2
+	  if(btn_poussoir_state == GPIO_PIN_SET){
+		  mavariable = 1;
+		  pin_toggle_delay /= pin_speed;
+		  HAL_GPIO_WritePin(green_led, GPIO_PIN_14, GPIO_PIN_SET);
+	  }
+	  else{
+		  mavariable = 0;
+		  HAL_GPIO_WritePin(green_led, GPIO_PIN_14, GPIO_PIN_RESET);
+	  }
+
+	  // 3
+	  btn_poussoir_state = HAL_GPIO_ReadPin(portA, GPIO_PIN_0);
+	  switch(toto){
+
+	  case 0:
+		  if(btn_poussoir_state == GPIO_PIN_SET){
+			  HAL_GPIO_WritePin(green_led, GPIO_PIN_12, GPIO_PIN_SET);
+			  HAL_GPIO_WritePin(green_led, GPIO_PIN_14, GPIO_PIN_SET);
+		  }
+		  else{
+			  HAL_GPIO_WritePin(green_led, GPIO_PIN_15, GPIO_PIN_SET);
+		  }
+		  break;
+	  case 1:
+		  if(btn_poussoir_state == GPIO_PIN_SET){
+			  HAL_GPIO_WritePin(green_led, GPIO_PIN_13, GPIO_PIN_SET);
+		  }
+		  else{
+			  HAL_GPIO_WritePin(green_led, GPIO_PIN_14, GPIO_PIN_SET);
+			  HAL_GPIO_WritePin(green_led, GPIO_PIN_13, GPIO_PIN_SET);
+		  }
+		  break;
+	  default:
+		  break;
+	  }
+	  HAL_GPIO_WritePin(green_led, GPIO_PIN_15, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(green_led, GPIO_PIN_14, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(green_led, GPIO_PIN_13, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(green_led, GPIO_PIN_12, GPIO_PIN_RESET);
+
+	  // Tempo
+	  uint32_t max_val = 4294967294;
+	  uint32_t tempo_var = 0;
+	  while(tempo_var < max_val){
+		  tempo_var ++;
+	  }
+	  //while((tempo_var++) < max_val);
+	  tempo_var = 0;
+	*/
+	  HAL_GPIO_TogglePin(green_led, GPIO_PIN_12);
+	  custom_delay(tm);
+	  int res = factorial(4);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
+
+// 2
+uint16_t factorial(uint16_t n){
+	// il faut que n soit choisit de sorte que son factoriel ne soit pas supérieur à 2^32
+	uint16_t res = 1;
+	for(int i = n; i > 1; i--){
+		res = res * i;
+		//res *= i;
+	}
+	return res;
+}
+// 3
+// A revoir !!
+void custom_delay(uint32_t max_val){
+  uint32_t tempo_var = 0;
+  while(tempo_var < max_val){
+	  tempo_var ++;
+  }
+  //while((tempo_var++) < max_val);
+  tempo_var = 0;
+}
+
 
 /**
   * @brief System Clock Configuration
